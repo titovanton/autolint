@@ -42,4 +42,4 @@ You need to specify at least one linter. Here are two that I'm using:
 ## CLI
 Currently available commands:
 
-    poetry run autolint <dir_to_watch>
+    poetry run lintify <dir_to_watch>
