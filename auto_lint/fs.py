@@ -1,11 +1,11 @@
 from queue import Queue
-from typing import override
 
 from watchdog.events import PatternMatchingEventHandler
 from watchdog.observers import Observer
 from watchdog.observers.api import BaseObserver
 
 from .schemas import Config
+from .compat import override
 
 
 class MyEventHandler(PatternMatchingEventHandler):

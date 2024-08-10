@@ -1,10 +1,10 @@
 import re
 from collections import deque
-from itertools import batched
 from typing import Callable, Deque
 
 import click
 
+from .compat import batched
 from .utils import get_stdout_with
 
 
