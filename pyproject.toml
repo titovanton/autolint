@@ -26,3 +26,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 lintify = "lintify.cli:main"
+
+[tool.mypy]
+mypy_path = "./lintify"

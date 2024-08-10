@@ -43,3 +43,18 @@ You need to specify at least one linter. Here are two that I'm using:
 Currently available commands:
 
     poetry run lintify <dir_to_watch>
+
+## MyPy Configuration
+If you use MyPy in a Django project, you need to configure the appropriate plugins and specify the project path. Otherwise, MyPy will raise various errors. Below is an example of the `pyproject.toml` section for this configuration:
+
+    [tool.mypy]
+    mypy_path = "./src"
+    plugins = [
+      "mypy_django_plugin.main",
+      "mypy_drf_plugin.main"
+    ]
+
+    [tool.django-stubs]
+    django_settings_module = "myproject.settings"
+
+In this example, we have a Django/DRF project named `myproject` located in the `./src` folder (with `manage.py` as the entry point in that folder).

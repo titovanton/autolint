@@ -20,13 +20,13 @@ class MyEventHandler(PatternMatchingEventHandler):
 
 
 def run_fs_observer(
-    path: str,
+    watch_dir: str,
     config: Config,
     fs_q: Queue
 ) -> BaseObserver:
     event_handler = MyEventHandler(fs_q, patterns=config.files)
     observer = Observer()
-    observer.schedule(event_handler, path, recursive=True)
+    observer.schedule(event_handler, watch_dir, recursive=True)
     observer.start()
 
     return observer

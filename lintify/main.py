@@ -8,7 +8,7 @@ from .schemas import Config, OutputQMsg, STOP_OUTPUT_FLAG
 from .renderers import greatings, byby
 
 
-def core_loop(path: str, config: Config) -> None:
+def core_loop(watch_dir: str, config: Config) -> None:
     greatings(config)
 
     # for the case you haven't created local config
@@ -30,7 +30,7 @@ def core_loop(path: str, config: Config) -> None:
     _output: Queue[OutputQMsg] = Queue()
 
     # running watchdog in a thread
-    observer = run_fs_observer(path, config, fs_queue)
+    observer = run_fs_observer(watch_dir, config, fs_queue)
 
     # running linters
     linter_threads: tuple[threading.Thread, ...] = tuple([
