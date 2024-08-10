@@ -6,5 +6,5 @@ theme: 'frame'  # raw | frame
 files:
   - '*.py'
 linters:
-  - 'flake8 {path}'
-  - 'mypy {path}'
+  # - 'flake8 {path}'
+  # - 'mypy {path}'

@@ -12,7 +12,7 @@ class Theme(Enum):
 class Config(BaseModel):
     theme: Theme
     files: list[str]
-    linters: list[str]
+    linters: list[str] | None
 
 
 @dataclass(frozen=True, kw_only=True, slots=True)

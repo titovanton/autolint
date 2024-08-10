@@ -11,12 +11,17 @@ from .renderers import greatings, byby
 def core_loop(path: str, config: Config) -> None:
     greatings(config)
 
+    # for the case you haven't created local config
+    if not config.linters:
+        byby('No linters specified!', config)
+        exit(1)
+
     # to receive file path from the watchdog
     fs_queue: Queue = Queue()
 
     # to notify all the linters about a file changed
     # independently
-    linter_inputs: dict[str, Queue] = {
+    linter_inputs: dict[str, Queue[str]] = {
         lnt: Queue()
         for lnt in config.linters
     }
@@ -46,7 +51,7 @@ def core_loop(path: str, config: Config) -> None:
             for q in linter_inputs.values():
                 q.put(item)
     except KeyboardInterrupt:
-        byby(config)
+        byby('^C pressed.', config)
 
         stop_fs_observer(observer)
         _output.put(STOP_OUTPUT_FLAG)

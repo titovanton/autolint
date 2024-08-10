@@ -69,7 +69,6 @@ def greatings(config: Config) -> None:
     _simple_dispatcher(title, body, config)
 
 
-def byby(config: Config) -> None:
+def byby(message: str, config: Config) -> None:
     title = 'Bye bye...'
-    body = '^C pressed.'
-    _simple_dispatcher(title, body, config)
+    _simple_dispatcher(title, message, config)
