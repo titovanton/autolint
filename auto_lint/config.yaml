@@ -1,0 +1,11 @@
+# Default config.
+# Can be overridden by
+# ~/.config.yaml if it exists.
+
+wait_fs: 0.2
+theme: 'frame'  # raw | frame
+files:
+  - '*.py'
+linters:
+  - 'flake8'
+  - 'mypy'
