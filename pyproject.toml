@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "auto-lint"
+name = "lintify"
 version = "0.1.0"
 description = ""
 authors = ["Titov Anton <webdev@titovanton.com>"]
@@ -25,4 +25,4 @@ build-backend = "poetry.core.masonry.api"
 
 
 [tool.poetry.scripts]
-autolint = "auto_lint.cli:main"
+lintify = "lintify.cli:main"
