@@ -24,7 +24,8 @@ def load_conf() -> Config:
 
     if local_conf.exists():
         with open(local_conf, 'r') as conf_file:
-            local_conf_data = yaml.safe_load(conf_file)
+            if data := yaml.safe_load(conf_file):
+                local_conf_data = data
 
     conf_data |= local_conf_data
     conf = Config(**conf_data)

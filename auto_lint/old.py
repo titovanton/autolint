@@ -216,7 +216,7 @@ def _run_command(command: list[str], config) -> None:
     title = ': '.join(command)
 
     # let the file system commit changes
-    time.sleep(config.wait_fs)
+    time.sleep(0.2)
 
     result = subprocess.run(command, stdout=subprocess.PIPE)
     output = result.stdout.decode()

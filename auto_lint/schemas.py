@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Literal
 
 from pydantic import BaseModel
 
@@ -11,10 +10,9 @@ class Theme(Enum):
 
 
 class Config(BaseModel):
-    wait_fs: float
     theme: Theme
     files: list[str]
-    linters: list[Literal['flake8', 'mypy']]
+    linters: list[str]
 
 
 @dataclass(frozen=True, kw_only=True, slots=True)
