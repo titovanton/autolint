@@ -1,10 +1,12 @@
 [tool.poetry]
 name = "lintify"
-version = "0.0.2"
-description = ""
+version = "0.0.3"
+description = "Yet another way to run multiple Python linters"
 authors = ["Titov Anton <webdev@titovanton.com>"]
 readme = "README.md"
 
+[tool.poetry.urls]
+homepage = "https://github.com/titovanton/lintify"
 
 [tool.poetry.dependencies]
 python = "^3.10"

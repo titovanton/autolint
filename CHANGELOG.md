@@ -1,6 +1,11 @@
 # Changelog
 
 
+## [0.0.3] - 2024-08-26
+### Changed
+- update PyPi metadata: homepage, description
+
+
 ## [0.0.2] - 2024-08-26
 ### Changed
 - Mixed async and threading approach with sequential/concurrent configuration settings
