@@ -1,8 +1,10 @@
-from queue import Queue
-from threading import Thread
+import asyncio
 
-from .schemas import OutputQMsg
-from .utils import run_linter
+from .schemas import Config, OutputQMsg
+from .utils import (
+    key_lock,
+    run_subprocess_async,
+)
 
 
 # put it in to the _input queue,
@@ -10,54 +12,55 @@ from .utils import run_linter
 STOP_LINTERS_FLAG = 'stop all linters'
 
 
-def run_linter_loop(
+async def run_linter_async(
     linter: str,
-    _input: Queue[str],
-    _output: Queue[OutputQMsg],
-) -> Thread:
-    """
-    Starts a loop that runs a specified linter on input data
-    from a queue, and places the results in an output queue.
-    The loop runs in a separate thread.
+    path: str,
+    _output: asyncio.Queue
+) -> None:
+    command = linter.format(path=path).split()
+    linter = command[0]
+    result = await run_subprocess_async(command)
+    message, error = result
+    await _output.put(OutputQMsg(
+        linter=linter,
+        file_path=path,
+        message=message,
+    ))
 
-    Args:
-        linter (str):
-            Command string that must contain the
-            `{path}` format parameter.
-            Example: `mypy {path}`
-        _input (Queue[str]):
-            A queue containing input data (file paths
-            or stop strings) to be linted.
-        _output (Queue[OutputQMsg]):
-            A queue where linting results will be placed.
 
-    Returns:
-        Thread: The thread in which the linter loop is running.
-    """
+async def loop_linters(
+    path: str,
+    config: Config,
+    _output: asyncio.Queue,
+):
+    linters = config.linters or []
 
-    def _loop(
-        linter: str,
-        _input: Queue[str],
-        _output: Queue[OutputQMsg],
-        stop_flag: str,
-    ) -> None:
-        while True:
-            path: str = _input.get()
+    for linter in linters:
+        if isinstance(linter, str):
+            await run_linter_async(linter, path, _output)
+        else:
+            await asyncio.gather(*[
+                run_linter_async(_lint, path, _output)
+                for _lint in linter
+            ], return_exceptions=True)
 
-            if path == stop_flag:
-                break
+    await key_lock.unlock(path)
 
-            command = linter.format(path=path).split()
-            _linter = command[0]
-            result = run_linter(command)
-            _output.put(OutputQMsg(
-                linter=_linter,
-                file_path=path,
-                message=result,
-            ))
 
-    thread = Thread(target=_loop, args=[
-        linter, _input, _output, STOP_LINTERS_FLAG
-    ])
-    thread.start()
-    return thread
+async def run_linters_loop_async(
+    fs_queue: asyncio.Queue,
+    _output: asyncio.Queue,
+    config: Config,
+) -> None:
+    while True:
+        path: str = await fs_queue.get()
+
+        if path == STOP_LINTERS_FLAG:
+            break
+
+        # This ensures that the files will be handled
+        # by a coroutine (one! per file) concurrently.
+        if not await key_lock(path):
+            asyncio.create_task(
+                loop_linters(path, config, _output)
+            )

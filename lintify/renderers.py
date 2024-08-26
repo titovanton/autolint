@@ -4,8 +4,8 @@ from typing import Callable
 
 import click
 
-from .frames import LightFrame, Frame
-from .schemas import Config, Theme, OutputQMsg
+from .frames import Frame, LightFrame
+from .schemas import Config, OutputQMsg, Theme
 
 
 def pre_renderer(func) -> Callable:

@@ -1,10 +1,18 @@
 # Default config.
 # Can be overridden by
-# ~/.config.yaml if it exists.
+# `~/.config.yaml` if it exists.
+# In turn, this may be overridden by
+# `lintify.yaml` file, next to `pyproject.toml`
 
-theme: 'frame'  # raw | frame
+# raw | frame
+theme: 'frame'
+
+# may be overridden by --watch-dir cli option
+watch_dir: './'
+
 files:
   - '*.py'
+
 linters:
-  # - 'flake8 {path}'
-  # - 'mypy {path}'
+  # - 'autoflake --remove-all-unused-imports --in-place {path}'
+  # - ['flake8 {path}', 'mypy {path}']
